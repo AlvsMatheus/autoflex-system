@@ -1,7 +1,14 @@
+import production from ".";
+
 const ProductionCards = () => {
+  const { products } = production;
+
+  const finished = products.filter((p) => p.status === "finished");
+  const progress = products.filter((p) => p.status === "progress");
+  const pending = products.filter((p) => p.status === "pending");
+
   return (
     <article className="flex flex-col gap-40">
-
       {/* FINISHED */}
       <section className="flex flex-col gap-10">
         <h2 className="uppercase font-bold text-lg text-emerald-500">
@@ -9,37 +16,18 @@ const ProductionCards = () => {
         </h2>
 
         <article className="grid grid-cols-1 lg:grid-cols-3 w-full gap-10 text-black">
-          <div className="flex flex-col justify-between gap-10 p-4 border border-gray-400 rounded-2xl shadow-lg shadow-black/15 bg-white">
-            <div>Product A</div>
-            <div className="flex justify-end gap-10 w-full">
-              <span>Edit</span>
-              <span>Delete</span>
+          {finished.map((product) => (
+            <div
+              key={product.id}
+              className="flex flex-col justify-between gap-10 p-4 border border-gray-400 rounded-2xl shadow-lg shadow-black/15 bg-white"
+            >
+              <h3>{product.label}</h3>
+              <div className="flex justify-end gap-10 w-full">
+                <span>Edit</span>
+                <span>Delete</span>
+              </div>
             </div>
-          </div>
-
-          <div className="flex flex-col justify-between gap-10 p-4 border border-gray-400 rounded-2xl shadow-lg shadow-black/15 bg-white">
-            <div>Product B</div>
-            <div className="flex justify-end gap-10 w-full">
-              <span>Edit</span>
-              <span>Delete</span>
-            </div>
-          </div>
-
-          <div className="flex flex-col justify-between gap-10 p-4 border border-gray-400 rounded-2xl shadow-lg shadow-black/15 bg-white">
-            <div>Product C</div>
-            <div className="flex justify-end gap-10 w-full">
-              <span>Edit</span>
-              <span>Delete</span>
-            </div>
-          </div>
-
-          <div className="flex flex-col justify-between gap-10 p-4 border border-gray-400 rounded-2xl shadow-lg shadow-black/15 bg-white">
-            <div>Product D</div>
-            <div className="flex justify-end gap-10 w-full">
-              <span>Edit</span>
-              <span>Delete</span>
-            </div>
-          </div>
+          ))}
         </article>
       </section>
 
@@ -50,83 +38,42 @@ const ProductionCards = () => {
         </h2>
 
         <article className="grid grid-cols-1 lg:grid-cols-3 w-full gap-10 text-black">
-          <div className="flex flex-col justify-between gap-10 p-4 border border-gray-400 rounded-2xl shadow-lg shadow-black/15 bg-white">
-            <div>Product A</div>
-            <div className="flex justify-end gap-10 w-full">
-              <span>Edit</span>
-              <span>Delete</span>
+          {progress.map((product) => (
+            <div
+              key={product.id}
+              className="flex flex-col justify-between gap-10 p-4 border border-gray-400 rounded-2xl shadow-lg shadow-black/15 bg-white"
+            >
+              <div>{product.label}</div>
+              <div className="flex justify-end gap-10 w-full">
+                <span>Edit</span>
+                <span>Delete</span>
+              </div>
             </div>
-          </div>
-
-          <div className="flex flex-col justify-between gap-10 p-4 border border-gray-400 rounded-2xl shadow-lg shadow-black/15 bg-white">
-            <div>Product B</div>
-            <div className="flex justify-end gap-10 w-full">
-              <span>Edit</span>
-              <span>Delete</span>
-            </div>
-          </div>
-
-          <div className="flex flex-col justify-between gap-10 p-4 border border-gray-400 rounded-2xl shadow-lg shadow-black/15 bg-white">
-            <div>Product C</div>
-            <div className="flex justify-end gap-10 w-full">
-              <span>Edit</span>
-              <span>Delete</span>
-            </div>
-          </div>
-
-          <div className="flex flex-col justify-between gap-10 p-4 border border-gray-400 rounded-2xl shadow-lg shadow-black/15 bg-white">
-            <div>Product D</div>
-            <div className="flex justify-end gap-10 w-full">
-              <span>Edit</span>
-              <span>Delete</span>
-            </div>
-          </div>
+          ))}
         </article>
       </section>
 
       {/* PENDING */}
       <section className="flex flex-col gap-10">
-        <h2 className="uppercase font-bold text-lg text-yellow-500">
-          Pending
-        </h2>
+        <h2 className="uppercase font-bold text-lg text-yellow-500">Pending</h2>
 
         <article className="grid grid-cols-1 lg:grid-cols-3 w-full gap-10 text-black">
-          <div className="flex flex-col justify-between gap-10 p-4 border border-gray-400 rounded-2xl shadow-lg shadow-black/15 bg-white">
-            <div>Product A</div>
-            <div className="flex justify-end gap-10 w-full">
-              <span>Edit</span>
-              <span>Delete</span>
+          {pending.map((produt) => (
+            <div
+              key={produt.id}
+              className="flex flex-col justify-between gap-10 p-4 border border-gray-400 rounded-2xl shadow-lg shadow-black/15 bg-white"
+            >
+              <div>{produt.label}</div>
+              <div className="flex justify-end gap-10 w-full">
+                <span>Edit</span>
+                <span>Delete</span>
+              </div>
             </div>
-          </div>
-
-          <div className="flex flex-col justify-between gap-10 p-4 border border-gray-400 rounded-2xl shadow-lg shadow-black/15 bg-white">
-            <div>Product B</div>
-            <div className="flex justify-end gap-10 w-full">
-              <span>Edit</span>
-              <span>Delete</span>
-            </div>
-          </div>
-
-          <div className="flex flex-col justify-between gap-10 p-4 border border-gray-400 rounded-2xl shadow-lg shadow-black/15 bg-white">
-            <div>Product C</div>
-            <div className="flex justify-end gap-10 w-full">
-              <span>Edit</span>
-              <span>Delete</span>
-            </div>
-          </div>
-
-          <div className="flex flex-col justify-between gap-10 p-4 border border-gray-400 rounded-2xl shadow-lg shadow-black/15 bg-white">
-            <div>Product D</div>
-            <div className="flex justify-end gap-10 w-full">
-              <span>Edit</span>
-              <span>Delete</span>
-            </div>
-          </div>
+          ))}
         </article>
       </section>
-
     </article>
-  )
-}
+  );
+};
 
-export default ProductionCards
+export default ProductionCards;
