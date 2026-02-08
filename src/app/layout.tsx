@@ -32,7 +32,7 @@ export default function RootLayout({
         <LayoutProvider >
         <div className="flex min-h-screen w-full bg-purple-100">
           <Nav />
-          <main className="flex-1 overflow-x-hidden bg-linear-to-b from-white to-blue-50">
+          <main className="flex-1 overflow-x-hidden bg-blue-50">
             {children}
           </main>
         </div>

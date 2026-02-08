@@ -1,6 +1,6 @@
 
 
-const ProductsCard = () => {
+const MaterialsCard = () => {
   return (
     <article className='grid grid-cols-1 lg:grid-cols-3 w-full gap-10 text-black'>
       <div className="flex flex-col justify-between gap-10 p-4 border border-gray-400 rounded-2xl shadow-lg shadow-black/15 bg-white">
@@ -35,4 +35,4 @@ const ProductsCard = () => {
   )
 }
 
-export default ProductsCard
+export default MaterialsCard
