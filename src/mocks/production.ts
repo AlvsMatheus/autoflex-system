@@ -3,7 +3,8 @@ export type ProductionStatus = "finished" | "progress" | "pending";
 
 export type Production = {
   id: number;
-  label: string;
+  productId: string;
+  requieredQuantity: 10,
   status: ProductionStatus;
 };
 
@@ -11,22 +12,26 @@ export type Production = {
     const products: Production[] = [
         {
             id:1,
-            label: "Product A",
+            productId: "Product A",
+            requieredQuantity: 10,
             status: "finished"
         },
         {
             id:2,
-            label: "Product B",
+            productId: "Product B",
+            requieredQuantity: 10,
             status: "progress"
         },
         {
             id:3,
-            label: "Product C",
+            productId: "Product C",
+            requieredQuantity: 10,
             status: "finished"
         },
         {
             id:4,
-            label: "Product D",
+            productId: "Product D",
+            requieredQuantity: 10,
             status: "pending"
         },
     ]

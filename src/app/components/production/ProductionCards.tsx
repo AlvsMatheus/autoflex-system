@@ -1,4 +1,4 @@
-import production from ".";
+import production from "@/mocks/production";
 
 const ProductionCards = () => {
   const { products } = production;
@@ -21,7 +21,7 @@ const ProductionCards = () => {
               key={product.id}
               className="flex flex-col justify-between gap-10 p-4 border border-gray-400 rounded-2xl shadow-lg shadow-black/15 bg-white"
             >
-              <h3>{product.label}</h3>
+              <h3>{product.id}</h3>
               <div className="flex justify-end gap-10 w-full">
                 <span>Edit</span>
                 <span>Delete</span>
@@ -43,7 +43,7 @@ const ProductionCards = () => {
               key={product.id}
               className="flex flex-col justify-between gap-10 p-4 border border-gray-400 rounded-2xl shadow-lg shadow-black/15 bg-white"
             >
-              <div>{product.label}</div>
+              <div>{product.id}</div>
               <div className="flex justify-end gap-10 w-full">
                 <span>Edit</span>
                 <span>Delete</span>
@@ -63,7 +63,7 @@ const ProductionCards = () => {
               key={produt.id}
               className="flex flex-col justify-between gap-10 p-4 border border-gray-400 rounded-2xl shadow-lg shadow-black/15 bg-white"
             >
-              <div>{produt.label}</div>
+              <div>{produt.id}</div>
               <div className="flex justify-end gap-10 w-full">
                 <span>Edit</span>
                 <span>Delete</span>

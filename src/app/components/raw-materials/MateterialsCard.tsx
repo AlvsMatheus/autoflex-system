@@ -1,4 +1,4 @@
-import { materials } from "."
+import { materials } from "@/mocks/rawMaterials"
 
 const MaterialsCard = () => {
   return (
@@ -7,7 +7,7 @@ const MaterialsCard = () => {
         <div 
         key={material.id}
         className="flex flex-col justify-between gap-10 p-4 border border-gray-400 rounded-2xl shadow-lg shadow-black/15 bg-white">
-        <h3>{material.label}</h3>
+        <h3>{material.name}</h3>
         <div className="flex justify-end gap-10 w-full">
           <span>Edit</span>
           <span>Delete</span>
