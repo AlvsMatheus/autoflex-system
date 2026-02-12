@@ -2,7 +2,7 @@ export type Product = {
   id: number;
   name: string;
   rawMaterialId: number;
-  requiredQuantity: number; // quanto consome por unidade
+  requiredQuantity: number; 
 };
 
 export const products: Product[] = [

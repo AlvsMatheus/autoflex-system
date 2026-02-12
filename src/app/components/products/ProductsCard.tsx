@@ -1,6 +1,18 @@
-import { products } from "@/mocks/products"
+type Product = {
+  id: number;
+  name: string;
+  stock: number;
+};
 
-const ProductsCard = () => {
+type Props = {
+  products: Product[];
+};
+
+
+const ProductsCard = ({products}: Props) => {
+
+ 
+
   return (
     <article className='grid grid-cols-1 lg:grid-cols-3 w-full gap-10 text-black'>
       {products.map((product) => (

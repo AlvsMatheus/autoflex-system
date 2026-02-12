@@ -1,6 +1,16 @@
-import { materials } from "@/mocks/rawMaterials"
+type RawMaterial = {
+    id: number,
+    name: string,
+    quantity: number
+}
 
-const MaterialsCard = () => {
+type Props = {
+  materials: RawMaterial[];
+};
+
+const MaterialsCard = ({materials}: Props) => {
+
+  
   return (
     <article className='grid grid-cols-1 lg:grid-cols-3 w-full gap-10 text-black'>
       {materials.map((material) => (
