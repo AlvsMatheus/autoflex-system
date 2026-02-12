@@ -45,6 +45,12 @@ const Page = () => {
     loadMaterials();
   }, []);
 
+  const handleDeleteMaterial = async (id: number) => {
+  await axios.delete(`http://localhost:3333/raw-materials/${id}`);
+  loadMaterials();
+};
+
+
   const shouldHideMaterials = isMobile && isNavOpen;
 
   if (shouldHideMaterials) return null;
@@ -66,7 +72,10 @@ const Page = () => {
         </section>
 
         <section className="w-full h-full">
-          <MaterialsCard materials={materials} />
+          <MaterialsCard 
+          materials={materials}
+          onDelete={handleDeleteMaterial}
+          />
         </section>
       </section>
       <Modal
@@ -101,7 +110,7 @@ const Page = () => {
       <button
         type="button"
         onClick={closeModal}
-        className="text-white px-4 py-2 rounded-2xl bg-red-500 border"
+        className="text-white px-4 py-2 rounded-2xl bg-red-500 border cursor-pointer hover:scale-105 hover:bg-red-700 transition-ll ease-in-out duration-150"
       >
         Cancel
       </button>

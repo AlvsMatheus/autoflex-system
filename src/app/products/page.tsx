@@ -37,11 +37,6 @@ const Page = () => {
 };
 
   const handleCreateProduct = async () => {
-    console.log({
-    name,
-    rawMaterialId,
-    requiredQuantity,
-  });
 
     await axios.post("http://localhost:3333/products", {
       name,
@@ -56,6 +51,12 @@ const Page = () => {
   useEffect(() => {
     loadProducts();
   }, []);
+
+  const handleDeleteProduct = async (id: number) => {
+  await axios.delete(`http://localhost:3333/products/${id}`);
+  loadProducts();
+};
+
 
   if (shouldHideProducts) return null;
 
@@ -72,7 +73,11 @@ const Page = () => {
         </section>
 
         <section className="w-full h-full">
-          <ProductsCard products={products}/>
+          <ProductsCard 
+          products={products}
+          onDelete={handleDeleteProduct}
+          />
+          
         </section>
       </section>
       <Modal isOpen={isModalOpen} onClose={closeModal} title="New Product">
@@ -120,7 +125,7 @@ const Page = () => {
             <button
               type="button"
               onClick={closeModal}
-              className="text-white px-4 py-2 rounded-2xl bg-red-500 border"
+              className="text-white px-4 py-2 rounded-2xl bg-red-500 border cursor-pointer hover:scale-105 hover:bg-red-700 transition-ll ease-in-out duration-150"
             >
               Cancel
             </button>
