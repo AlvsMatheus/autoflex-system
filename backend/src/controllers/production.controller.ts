@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { getProductionSuggestions } from "../services/production.service";
 import {
   getAllProductions,
   createProduction,
@@ -12,6 +13,15 @@ export function listProductions(req: Request, res: Response) {
     return res.status(500).json({
       message: "Error fetching productions",
     });
+  }
+}
+
+export function getSuggestions(req: Request, res: Response) {
+  try {
+    const suggestions = getProductionSuggestions();
+    return res.json(suggestions);
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 

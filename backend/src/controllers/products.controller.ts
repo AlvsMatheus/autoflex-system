@@ -8,22 +8,22 @@ export function listProducts(req: Request, res: Response) {
 }
 
 export function storeProduct(req: Request, res: Response) {
-  const { name, rawMaterialId, requiredQuantity } = req.body;
+  const { name, value } = req.body;
 
-  if (!name || !rawMaterialId || !requiredQuantity) {
+  if (!name || value === undefined) {
     return res.status(400).json({
-      error: "name, rawMaterialId and requiredQuantity are required",
+      error: "name and value are required",
     });
   }
 
   const product = createProduct({
     name,
-    rawMaterialId,
-    requiredQuantity,
+    value,
   });
 
   return res.status(201).json(product);
 }
+
 
 {/*Delete */}
 
