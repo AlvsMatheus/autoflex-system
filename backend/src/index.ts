@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import "./database/connection"
 import productsRoutes from "../src/routes/products.routes";
 import rawMaterialsRoutes from "../src/routes/rawMaterials.routes";
 import productionRoutes from "../src/routes/production.routes";

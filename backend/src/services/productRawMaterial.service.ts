@@ -1,78 +1,34 @@
-import { productRawMaterials, ProductRawMaterial } from "../mocks/productRawMaterials";
-import { products } from "../mocks/products";
-import { rawMaterials } from "../mocks/rawMaterials";
+import { pool } from "../database/connection";
 
-export function getAllProductRawMaterials() {
-  return productRawMaterials;
-}
-
-export function createProductRawMaterial(
-  data: Omit<ProductRawMaterial, "id">
-) {
-  // Validate if product exists
-  const productExists = products.find(
-    (product) => product.id === data.productId
+export async function getAllProductRawMaterials() {
+  const result = await pool.query(
+    "SELECT * FROM product_raw_materials ORDER BY id ASC"
   );
 
-  if (!productExists) {
-    return { error: "Product not found" };
-  }
-
-  // Validate if raw material exists
-  const rawMaterialExists = rawMaterials.find(
-    (rawMaterial) => rawMaterial.id === data.rawMaterialId
-  );
-
-  if (!rawMaterialExists) {
-    return { error: "Raw material not found" };
-  }
-
-  const newRelation: ProductRawMaterial = {
-    id: productRawMaterials.length + 1,
-    ...data,
-  };
-
-  productRawMaterials.push(newRelation);
-
-  return newRelation;
+  return result.rows;
 }
 
-export function deleteProductRawMaterial(id: number) {
-  const index = productRawMaterials.findIndex(
-    (relation) => relation.id === id
+export async function createProductRawMaterial(data: {
+  product_id: number;
+  raw_material_id: number;
+  required_quantity: number;
+}) {
+  const result = await pool.query(
+    `INSERT INTO product_raw_materials 
+     (product_id, raw_material_id, required_quantity) 
+     VALUES ($1, $2, $3) 
+     RETURNING *`,
+    [data.product_id, data.raw_material_id, data.required_quantity]
   );
 
-  if (index === -1) {
-    return null;
-  }
-
-  const deleted = productRawMaterials.splice(index, 1);
-
-  return deleted[0];
+  return result.rows[0];
 }
 
-export function updateProductRawMaterial(
-  id: number,
-  data: Omit<ProductRawMaterial, "id">
-) {
-  const index = productRawMaterials.findIndex(
-    (relation) => relation.id === id
+export async function deleteProductRawMaterial(id: number) {
+  const result = await pool.query(
+    "DELETE FROM product_raw_materials WHERE id = $1 RETURNING *",
+    [id]
   );
 
-  if (index === -1) {
-    return null;
-  }
-
-  const updated: ProductRawMaterial = {
-    id,
-    ...data,
-  };
-
-  productRawMaterials[index] = updated;
-
-  return updated;
-}
-
-export function getProductRawMaterialById(id: number) {
-  return productRawMaterials.find((relation) => relation.id === id) || null;
+  return result.rows[0];
 }

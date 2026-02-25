@@ -1,48 +1,47 @@
-import { products, Product } from "../mocks/products";
+import { pool } from "../database/connection";
 
-export function getAllProducts() {
-  return products;
+export async function getAllProducts() {
+  const result = await pool.query("SELECT * FROM products ORDER BY id ASC");
+  return result.rows;
 }
 
-export function createProduct(data: Omit<Product, "id">) {
-  const newProduct: Product = {
-    id: products.length + 1,
-    ...data,
-  };
+export async function createProduct(data: {
+  name: string;
+  value: number;
+}) {
+  const result = await pool.query(
+    "INSERT INTO products (name, value) VALUES ($1, $2) RETURNING *",
+    [data.name, data.value]
+  );
 
-  products.push(newProduct);
-  return newProduct;
+  return result.rows[0];
 }
 
-export function deleteProduct(id: number) {
-  const index = products.findIndex(product => product.id === id);
+export async function deleteProduct(id: number) {
+  const result = await pool.query(
+    "DELETE FROM products WHERE id = $1 RETURNING *",
+    [id]
+  );
 
-  if (index === -1) {
+  if (result.rows.length === 0) {
     return null;
   }
 
-  const deletedProduct = products.splice(index, 1);
-  return deletedProduct[0];
+  return result.rows[0];
 }
 
-export function updateProduct(
+export async function updateProduct(
   id: number,
-  data: Omit<Product, "id">
+  data: { name: string; value: number }
 ) {
-  const productIndex = products.findIndex((product) => product.id === id);
+  const result = await pool.query(
+    "UPDATE products SET name = $1, value = $2 WHERE id = $3 RETURNING *",
+    [data.name, data.value, id]
+  );
 
-  if (productIndex === -1) {
+  if (result.rows.length === 0) {
     return null;
   }
 
-  const updatedProduct: Product = {
-    id,
-    ...data,
-  };
-
-  products[productIndex] = updatedProduct;
-
-  return updatedProduct;
+  return result.rows[0];
 }
-
-

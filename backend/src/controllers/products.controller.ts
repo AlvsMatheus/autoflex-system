@@ -1,13 +1,17 @@
 import { Request, Response } from "express";
-import { getAllProducts, createProduct } from "../services/products.service";
-import { deleteProduct } from "../services/products.service";
-import { updateProduct } from "../services/products.service";
+import {
+  getAllProducts,
+  createProduct,
+  deleteProduct,
+  updateProduct
+} from "../services/products.service";
 
-export function listProducts(req: Request, res: Response) {
-  return res.json(getAllProducts());
+export async function listProducts(req: Request, res: Response) {
+  const products = await getAllProducts();
+  return res.json(products);
 }
 
-export function storeProduct(req: Request, res: Response) {
+export async function storeProduct(req: Request, res: Response) {
   const { name, value } = req.body;
 
   if (!name || value === undefined) {
@@ -16,21 +20,15 @@ export function storeProduct(req: Request, res: Response) {
     });
   }
 
-  const product = createProduct({
-    name,
-    value,
-  });
+  const product = await createProduct({ name, value });
 
   return res.status(201).json(product);
 }
 
-
-{/*Delete */}
-
-export function removeProduct(req: Request, res: Response) {
+export async function removeProduct(req: Request, res: Response) {
   const { id } = req.params;
 
-  const product = deleteProduct(Number(id));
+  const product = await deleteProduct(Number(id));
 
   if (!product) {
     return res.status(404).json({ error: "Product not found" });
@@ -39,18 +37,23 @@ export function removeProduct(req: Request, res: Response) {
   return res.status(200).json(product);
 }
 
-{/*Edit */}
-
-export function editProduct(req: Request, res: Response) {
+export async function editProduct(req: Request, res: Response) {
   const id = Number(req.params.id);
-  const data = req.body;
+  const { name, value } = req.body;
 
-  const updated = updateProduct(id, data);
-
-  if (!updated) {
-    return res.status(404).json({ message: "Product not found" });
+  if (!name || value === undefined) {
+    return res.status(400).json({
+      error: "name and value are required",
+    });
   }
 
-  return res.json(updated);
-}
+  const updatedProduct = await updateProduct(id, { name, value });
 
+  if (!updatedProduct) {
+    return res.status(404).json({
+      error: "Product not found",
+    });
+  }
+
+  return res.status(200).json(updatedProduct);
+}

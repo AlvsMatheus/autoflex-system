@@ -1,30 +1,34 @@
 import { Request, Response } from "express";
-import { getAllRawMaterials, createRawMaterial } from "../services/rawMaterials.service";
-import { deleteMaterial } from "../services/rawMaterials.service";
-import { updateMaterial } from "../services/rawMaterials.service";
+import {
+  getAllRawMaterials,
+  createRawMaterial,
+  deleteMaterial,
+  updateMaterial,
+} from "../services/rawMaterials.service";
 
-export function listRawMaterials(req: Request, res: Response) {
-  return res.json(getAllRawMaterials());
+export async function listRawMaterials(req: Request, res: Response) {
+  const materials = await getAllRawMaterials();
+  return res.json(materials);
 }
 
-export function storeRawMaterial(req: Request, res: Response) {
+export async function storeRawMaterial(req: Request, res: Response) {
   const { name, quantity } = req.body;
 
-  if (!name || !quantity) {
+  if (!name || quantity === undefined) {
     return res
       .status(400)
       .json({ error: "name and quantity are required" });
   }
 
-  const material = createRawMaterial({ name, quantity });
+  const material = await createRawMaterial({ name, quantity });
 
   return res.status(201).json(material);
 }
 
-export function removeMaterial(req: Request, res: Response) {
-  const { id } = req.params;
+export async function removeMaterial(req: Request, res: Response) {
+  const id = Number(req.params.id);
 
-  const material = deleteMaterial(Number(id));
+  const material = await deleteMaterial(id);
 
   if (!material) {
     return res.status(404).json({ error: "Material not found" });
@@ -33,13 +37,17 @@ export function removeMaterial(req: Request, res: Response) {
   return res.status(200).json(material);
 }
 
-{/*Edit */}
-
-export function editMaterial(req: Request, res: Response) {
+export async function editMaterial(req: Request, res: Response) {
   const id = Number(req.params.id);
-  const data = req.body;
+  const { name, quantity } = req.body;
 
-  const updated = updateMaterial(id, data);
+  if (!name || quantity === undefined) {
+    return res
+      .status(400)
+      .json({ error: "name and quantity are required" });
+  }
+
+  const updated = await updateMaterial(id, { name, quantity });
 
   if (!updated) {
     return res.status(404).json({ message: "Material not found" });

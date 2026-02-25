@@ -1,48 +1,42 @@
-import { rawMaterials, RawMaterial } from "../mocks/rawMaterials";
+import { pool } from "../database/connection"; 
 
-export function getAllRawMaterials() {
-  return rawMaterials;
+export async function getAllRawMaterials() {
+  const result = await pool.query(
+    "SELECT * FROM raw_materials ORDER BY id ASC"
+  );
+
+  return result.rows;
 }
 
-export function createRawMaterial(
-  data: Omit<RawMaterial, "id">
-) {
-  const newMaterial: RawMaterial = {
-    id: rawMaterials.length + 1,
-    ...data,
-  };
+export async function createRawMaterial(data: {
+  name: string;
+  quantity: number;
+}) {
+  const result = await pool.query(
+    "INSERT INTO raw_materials (name, quantity) VALUES ($1, $2) RETURNING *",
+    [data.name, data.quantity]
+  );
 
-  rawMaterials.push(newMaterial);
-  return newMaterial;
+  return result.rows[0];
 }
 
-export function deleteMaterial(id: number) {
-    const index = rawMaterials.findIndex(material => material.id === id)
-    
-    if (index === -1) {
-        return null
-    }
+export async function deleteMaterial(id: number) {
+  const result = await pool.query(
+    "DELETE FROM raw_materials WHERE id = $1 RETURNING *",
+    [id]
+  );
 
-    const deletedMaterial = rawMaterials.splice(index, 1);
-    return deletedMaterial[0]
+  return result.rows[0];
 }
 
-export function updateMaterial(
+export async function updateMaterial(
   id: number,
-  data: Omit<RawMaterial, "id">
+  data: { name: string; quantity: number }
 ) {
-  const materialIndex = rawMaterials.findIndex((material) => material.id === id);
+  const result = await pool.query(
+    "UPDATE raw_materials SET name = $1, quantity = $2 WHERE id = $3 RETURNING *",
+    [data.name, data.quantity, id]
+  );
 
-  if (materialIndex === -1) {
-    return null;
-  }
-
-  const updatedMaterial: RawMaterial = {
-    id,
-    ...data,
-  };
-
-  rawMaterials[materialIndex] = updatedMaterial;
-
-  return updatedMaterial;
+  return result.rows[0];
 }
