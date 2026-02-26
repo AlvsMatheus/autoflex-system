@@ -11,7 +11,7 @@ import axios from "axios";
 type Product = {
   id: number;
   name: string;
-  stock: number;
+  value: number;
 };
 
 const Page = () => {
@@ -20,9 +20,10 @@ const Page = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const shouldHideProducts = isMobile && isNavOpen;
   const [products, setProducts] = useState<Product[]>([]);
-  const [name, setName] = useState("")
-  const [rawMaterialId, setRawMaterialId] = useState<number>(1);
-  const [requiredQuantity, setRequiredQuantity] = useState<number>(0);
+  const [name, setName] = useState("");
+  const [value, setValue] = useState<number>(0);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -32,16 +33,16 @@ const Page = () => {
   };
 
   const loadProducts = async () => {
-  const response = await axios.get<Product[]>("http://localhost:3333/products");
-  setProducts(response.data);
-};
+    const response = await axios.get<Product[]>(
+      "http://localhost:3333/products",
+    );
+    setProducts(response.data);
+  };
 
   const handleCreateProduct = async () => {
-
     await axios.post("http://localhost:3333/products", {
       name,
-      rawMaterialId,
-      requiredQuantity,
+      value,
     });
 
     loadProducts();
@@ -53,10 +54,33 @@ const Page = () => {
   }, []);
 
   const handleDeleteProduct = async (id: number) => {
-  await axios.delete(`http://localhost:3333/products/${id}`);
-  loadProducts();
-};
+    await axios.delete(`http://localhost:3333/products/${id}`);
+    loadProducts();
+  };
 
+  const handleEditProduct = (product: Product) => {
+    setIsEditing(true);
+    setEditingProduct(product);
+
+    setName(product.name);
+    setValue(product.value);
+
+    setIsModalOpen(true);
+  };
+
+  const handleUpdateProduct = async () => {
+    if (!editingProduct) return;
+
+    await axios.put(`http://localhost:3333/products/${editingProduct.id}`, {
+      name,
+      value,
+    });
+
+    loadProducts();
+    closeModal();
+    setIsEditing(false);
+    setEditingProduct(null);
+  };
 
   if (shouldHideProducts) return null;
 
@@ -73,22 +97,24 @@ const Page = () => {
         </section>
 
         <section className="w-full h-full">
-          <ProductsCard 
-          products={products}
-          onDelete={handleDeleteProduct}
+          <ProductsCard
+            products={products}
+            onDelete={handleDeleteProduct}
+            onEdit={handleEditProduct}
           />
-          
         </section>
       </section>
       <Modal isOpen={isModalOpen} onClose={closeModal} title="New Product">
-        <form 
+        <form
           onSubmit={(e) => {
-          e.preventDefault();
-          handleCreateProduct();
-        }}
-        className="flex flex-col gap-4">
+            e.preventDefault();
+          }}
+          className="flex flex-col gap-4"
+        >
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-black">Product name</label>
+            <label className="text-sm font-medium text-black">
+              Product name
+            </label>
             <input
               type="text"
               value={name}
@@ -102,22 +128,10 @@ const Page = () => {
             <label className="text-sm font-medium text-black">Price</label>
             <input
               type="number"
-              value={rawMaterialId}
-              onChange={(e) => setRawMaterialId(Number(e.target.value))}
+              value={value}
+              onChange={(e) => setValue(Number(e.target.value))}
               className="border-2 border-black text-black rounded-lg p-2"
               placeholder="Ex: 100"
-            />
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-black">
-              Required Quantity
-            </label>
-            <input
-              type="number"
-              value={requiredQuantity}
-              onChange={(e) => setRequiredQuantity(Number(e.target.value))}
-              className="border-2 border-black text-black rounded-lg p-2"
             />
           </div>
 
@@ -130,7 +144,10 @@ const Page = () => {
               Cancel
             </button>
 
-            <BtnGreen onClick={handleCreateProduct} label="Save Product" />
+            <BtnGreen
+              onClick={isEditing ? handleUpdateProduct : handleCreateProduct}
+              label={isEditing ? "Update Product" : "Save Product"}
+            />
           </div>
         </form>
       </Modal>

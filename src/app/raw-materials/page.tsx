@@ -21,6 +21,9 @@ const Page = () => {
   const [materials, setMaterials] = useState<RawMaterial[]>([]);
   const [name, setName] = useState("");
   const [quantity, setQuantity] = useState<number>(0);
+  const [editingMaterial, setEditingMaterial] = useState<RawMaterial | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  
   const openModal = () => {setIsModalOpen(true)}
   const closeModal = () => {setIsModalOpen(false)}
   
@@ -32,14 +35,17 @@ const Page = () => {
 };
 
   const handleCreateMaterial = async () => {
-    await axios.post("http://localhost:3333/raw-materials", {
-      name,
-      quantity
-    });
+  await axios.post("http://localhost:3333/raw-materials", {
+    name,
+    quantity
+  });
 
-    loadMaterials();
-    closeModal();
-  };
+  setName("");
+  setQuantity(0);
+
+  loadMaterials();
+  closeModal();
+};
 
   useEffect(() => {
     loadMaterials();
@@ -49,6 +55,33 @@ const Page = () => {
   await axios.delete(`http://localhost:3333/raw-materials/${id}`);
   loadMaterials();
 };
+
+  const handleEditMaterial = (material: RawMaterial) => {
+    setIsEditing(true);
+    setEditingMaterial(material);
+
+    setName(material.name);
+    setQuantity(material.quantity);
+
+    setIsModalOpen(true);
+  };
+
+  const handleUpdateMaterial = async () => {
+    if (!editingMaterial) return;
+
+    await axios.put(
+      `http://localhost:3333/rawMaterials/${editingMaterial.id}`,
+      {
+        name,
+        quantity,
+      }
+    );
+
+    loadMaterials();
+    closeModal();
+    setIsEditing(false);
+    setEditingMaterial(null);
+  };
 
 
   const shouldHideMaterials = isMobile && isNavOpen;
@@ -65,7 +98,10 @@ const Page = () => {
 
       <section className="h-full w-full flex flex-col gap-20">
         <section className="flex flex-col gap-5">
-          <BtnGreen onClick={openModal} label="+ New Material"/>
+          <BtnGreen
+            onClick={isEditing ? handleUpdateMaterial : handleCreateMaterial}
+            label={isEditing ? "Update Material" : "Save Material"}
+          />
           <p className="text-black/70 text-1xl">
             Manage registered materials.
           </p>
@@ -75,6 +111,7 @@ const Page = () => {
           <MaterialsCard 
           materials={materials}
           onDelete={handleDeleteMaterial}
+          onEdit={handleEditMaterial}
           />
         </section>
       </section>
@@ -83,7 +120,11 @@ const Page = () => {
   onClose={closeModal}
   title="New Material"
 >
-  <form className="flex flex-col gap-4">
+  <form 
+  onSubmit={(e) => {
+    e.preventDefault();
+  }}
+  className="flex flex-col gap-4">
     <div className="flex flex-col gap-1">
       <label className="text-sm font-medium text-black">Material Name</label>
       <input

@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Production Management System
 
-## Getting Started
+A full-stack production management system that calculates the maximum possible product manufacturing based on available raw materials.
 
-First, run the development server:
+This project simulates a simplified production/ERP logic where products depend on raw materials and the system suggests the most profitable production based on current stock.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+# Tech Stack
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Frontend
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Next.js
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+TypeScript
 
-## Learn More
+TailwindCSS
 
-To learn more about Next.js, take a look at the following resources:
+Axios
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Backend
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Node.js
 
-## Deploy on Vercel
+Express
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+TypeScript
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+PostgreSQL
+
+## Features
+
+CRUD for Products
+
+CRUD for Raw Materials
+
+Product ↔ Raw Material relationship management
+
+Production capacity calculation
+
+Profit-based production suggestions
+
+# Production Logic
+
+For each product, the system calculates:
+available_quantity / required_quantity
+
+The lowest result among required materials determines the maximum production capacity.
+
+The total potential revenue is calculated as:
+max_production * unit_value
+
+# Database Tables
+
+products
+
+raw_materials
+
+product_raw_materials
+
+# Created By
+
+Matheus Alves 
