@@ -3,8 +3,8 @@ import cors from "cors";
 import "./database/connection"
 import productsRoutes from "../src/routes/products.routes";
 import rawMaterialsRoutes from "../src/routes/rawMaterials.routes";
-import productionRoutes from "../src/routes/production.routes";
 import productRawMaterialsRoutes from "../src/routes/productRawMaterial.routes";
+import productionRoutes from "../src/routes/production.routes"
 
 const app = express();
 
@@ -13,8 +13,8 @@ app.use(express.json());
 
 app.use("/products", productsRoutes);
 app.use("/raw-materials", rawMaterialsRoutes);
-app.use("/productions", productionRoutes);
 app.use("/product-raw-materials", productRawMaterialsRoutes);
+app.use("/production", productionRoutes);
 
 const PORT = 3333;
 
